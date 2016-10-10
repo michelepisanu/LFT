@@ -1,4 +1,3 @@
-//prova
 /**
  * 	Parte 1 del progetto di LFT;
  */
