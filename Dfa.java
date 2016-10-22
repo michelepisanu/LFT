@@ -158,7 +158,7 @@ public class Dfa {
 
     /**
      * Esercizio 1.3:
-     *
+     * E' l'esercizio precedente, modificato con l'aggiunta del riconoscimento degli spazi;
      */
     public static boolean virgolaMobileSpazi(String s) {
 		int state = 0, i = 0;
