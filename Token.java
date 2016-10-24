@@ -1,7 +1,13 @@
 public class Token {
     public final int tag;
-    public Token(int t) { tag = t;  }
-    public String toString() {return "<" + tag + ">";}
+    public Token(int t) {
+        tag = t; 
+    }
+    
+    public String toString() {
+        return "<" + tag + ">";
+    }
+    
     public static final Token
             comma = new Token(','),
             colon = new Token(':'),
