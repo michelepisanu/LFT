@@ -18,3 +18,4 @@ public class Tag {
             NOT = 270,
             PRINT = 271;//
 }
+/*Il commento // dopo le variabili, identifica quelle inserite come parole riservate in Lexer*/

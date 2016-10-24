@@ -2,15 +2,6 @@ public class Number extends Token{
 
 	public int value=0;
 
-/*    public Number (int tag, String s){
-        super(tag);
-
-
-    }
-    public String toString() {
-        return "<" + tag + ", " + value + ">";
-    }
- */
 	public String lexeme = "";
 	public Number(int tag, String s) {
 		super(tag);
