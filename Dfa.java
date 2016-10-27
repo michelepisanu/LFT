@@ -95,9 +95,7 @@ public class Dfa {
         while(state >= 0 && i < s.length()) {
             final char ch = s.charAt(i++);
             switch (state) {
-                case 0: if (ch == '+')
-                        	state = 1;
-                    	else if (ch == '-')
+                case 0: if (ch == '+' || ch == '-')
                         	state = 1;
                     	else if (ch == '.')
                         	state = 2;
@@ -114,11 +112,11 @@ public class Dfa {
                     		state = -1;
                 		break;
                	case 2: if (Supporto.isANumber(ch))
-                        	state=3;
+                        	state = 3;
                     	else
-                    		state=-1;
+                    		state = -1;
                 		break;
-                case 3: if (ch == 'e')
+                case 3: if (ch == 'e')                          //Stato finale
                         	state = 4;
                     	else if (Supporto.isANumber(ch))
                         	state = 3;
@@ -138,11 +136,11 @@ public class Dfa {
                     	else 
                     		state = -1;
                 		break;
-                case 6: if (Supporto.isANumber(ch))
+                case 6: if (Supporto.isANumber(ch))              //Stato finale
                         	state = 6;
                     	else
                     		state = -1;
-                case 7: if (Supporto.isANumber(ch))
+                case 7: if (Supporto.isANumber(ch))              //Stato finale
                         	state = 7;
                     	else if (ch == '.')
                         	state = 2;
