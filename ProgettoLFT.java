@@ -25,6 +25,11 @@ public class ProgettoLFT {
 		for (String a: args)
 			System.out.println(a + " " + (Dfa.identificatori(a) ? "OK" : "NOPE"));
 
+		// Es 1.5 -->Dfa.multipliTre();
+		System.out.println("-- Esercizio 1.5 - Identifica stringhe che trattano multipli di 3:");
+		for (String a: args)
+			System.out.println(a + " " + (Dfa.multipliTre(a) ? "OK" : "NOPE"));
+
 		// Es 1.8 --> Dfa.nfaToDfa();
 		System.out.println("- Esercizio 1.8 - Verifico che la sia del tipo a^nb oppure ba^n:");
 		for (String a: args)

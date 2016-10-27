@@ -278,6 +278,48 @@ public class Dfa {
 	}
 
     /**
+     * Esercizio 1.5:
+     * Esercizio 1.5. Progettare e implementare un DFA che riconosca il linguaggio dei numeri binari
+     * (stringhe di 0 e 1) il cui valore e multiplo di 3. Per esempio, ` 110 e 1001 sono stringhe del
+     * linguaggio (rappresentano rispettivamente i numeri 6 e 9), mentre 10 e 111 no (rappresentano
+     * rispettivamente i numeri 2 e 7). 
+     */
+
+    public static boolean multipliTre(String s) {
+        int state = 0, i = 0;
+
+        while (state >= 0 && i < s.length()) {
+            final char ch = s.charAt(i++);
+            switch (state) {
+                case 0: if (ch == '0')
+                            state = 0;
+                        else if (ch == '1')
+                            state = 1;
+                        else
+                            state = -1;
+                        break;
+                case 1: if (ch == '0')
+                            state = 2;
+                        else if (ch == '1')
+                            state = 0;
+                        else 
+                            state = -1;
+                        break;
+                case 2: if (ch == '0')
+                            state = 1;
+                        else if (ch == '1')
+                            state = 2;
+                        else
+                            state = -1;
+                        break;
+            }
+        }
+
+        return state == 0;
+    }
+
+
+    /**
      * Esercizio 1.8:
      * Da un Nfa con mosse silenti a un Dfa minimo.
      * Questo Automa riconosce il linguaggio se è del tipo: ab^n oppure a^nb.
