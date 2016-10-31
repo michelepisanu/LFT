@@ -318,6 +318,51 @@ public class Dfa {
         return state == 0;
     }
 
+    /**
+     * Esercizio 1.6:
+     * Progettare un analizzatore lessicale, che si occupa del riconoscimento dei commenti.
+     */
+
+    public static boolean comment(String s){
+        int state = 0, i = 0;
+
+        while (state >= 0 && i < s.length()) {
+            final char ch = s.charAt(i++);
+            switch (state) {
+                case 0: if (ch == '/')
+                            state = 1;
+                        else
+                            state = -1;
+                        break;
+                case 1: if (ch == '*')
+                            state = 2;
+                        else
+                            state = -1;
+                        break;
+                case 2: if (ch == '*')
+                            state = 3;
+                        else if (ch == 'a' || ch == '/')
+                            state = 2;
+                        else
+                            state = -1;
+                        break;
+                case 3: if (ch == '*')
+                            state = 3;
+                        else if (ch == 'a')
+                            state = 2;
+                        else if (ch == '/')
+                            state = 4;
+                        else
+                            state = -1;
+                        break;
+                case 4: if (ch == '/' || ch != '/')             //Stato finale è sempre falso se la stringa non finisce la.
+                            state = -1;
+                        break;
+
+            }
+        }
+        return state == 4;
+    }
 
     /**
      * Esercizio 1.8:

@@ -30,6 +30,11 @@ public class ProgettoLFT {
 		for (String a: args)
 			System.out.println(a + " " + (Dfa.multipliTre(a) ? "OK" : "NOPE"));
 
+		// Es 1.6 -->Dfa.comment();
+		System.out.println("-- Esercizio 1.6 - Identifica il commento del tipo /**/:");
+		for (String a: args)
+			System.out.println(a + " " + (Dfa.comment(a) ? "OK" : "NOPE"));
+
 		// Es 1.8 --> Dfa.nfaToDfa();
 		System.out.println("- Esercizio 1.8 - Verifico che la sia del tipo a^nb oppure ba^n:");
 		for (String a: args)
