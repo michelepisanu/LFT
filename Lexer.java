@@ -12,6 +12,7 @@ public class Lexer {
     void reserve(Number n) { numbers.put(n.lexeme, n); }
     public Lexer() {
         reserve( new Word(Tag.VAR, "var"));
+        /*Gestisco le altre parole chiave*/
         reserve( new Word(Tag.PRINT, "print"));
         reserve( new Word(Tag.EOF, "$"));
         reserve( new Word(Tag.BOOLEAN, "boolean"));
@@ -46,7 +47,7 @@ public class Lexer {
             case ',':
                 peek = ' ';
                 return Token.comma;
-
+            /*Gestisco gli altri casi*/
             case ';':
             	peek = ' ';
             	return Token.semicolon;
@@ -87,7 +88,7 @@ public class Lexer {
                             + " after & : "  + peek );
                     return null;
                 }
-
+            /*Gestisco gli altri casi*/
             case '|':
             	readch();
             	if (peek == '|'){
@@ -160,6 +161,7 @@ public class Lexer {
                     	return w;
                     }
                 } 
+                /*Gestisco il caso dei numeri*/
                 else {
 	               	if (Character.isDigit(peek)){
                 		String s = "";
