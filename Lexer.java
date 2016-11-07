@@ -7,12 +7,20 @@ public class Lexer {
     private char peek = ' ';
 
     Hashtable<String,Word> words = new Hashtable<String,Word>();
-    void reserve(Word w) { words.put(w.lexeme, w); }
+    void reserve(Word w) {
+        words.put(w.lexeme, w);
+    }
+
     Hashtable<String,Number> numbers = new Hashtable<String,Number>();
-    void reserve(Number n) { numbers.put(n.lexeme, n); }
+    void reserve(Number n) {
+        numbers.put(n.lexeme, n);
+    }
+    
+    /**
+     * Costruttore che gestisce le altre parole chiave.
+     */
     public Lexer() {
         reserve( new Word(Tag.VAR, "var"));
-        /*Gestisco le altre parole chiave*/
         reserve( new Word(Tag.PRINT, "print"));
         reserve( new Word(Tag.EOF, "$"));
         reserve( new Word(Tag.BOOLEAN, "boolean"));
@@ -24,11 +32,11 @@ public class Lexer {
         reserve( new Word(Tag.INTEGER, "integer"));
         reserve( new Word(Tag.LE, "<="));
         reserve( new Word(Tag.GE, ">="));
-			
-			// ... gestire le altre parole chiave ... //
-
     }
     
+    /**
+     * Si occupa della lettura da tastiera, della verifica che il valore inserito faccia parte dal carattere 0 al 255 del codice ANSI;
+     */
     private void readch() {
         try {
             peek = (char) System.in.read();
@@ -37,9 +45,12 @@ public class Lexer {
         }
     }
 
+    /**
+     *
+     */
     public Token lexical_scan() {
         while (peek == ' ' || peek == '\t' || peek == '\n'  || peek == '\r') {
-            if (peek == '\n') line++;
+            if (peek == '\n') line++; //Questo non andrebbe cambiato?
             readch();
         }
         
@@ -47,37 +58,27 @@ public class Lexer {
             case ',':
                 peek = ' ';
                 return Token.comma;
-            /*Gestisco gli altri casi*/
             case ';':
             	peek = ' ';
             	return Token.semicolon;
-
-            case '(':
+                case '(':
             	peek = ' ';
             	return Token.lpar;
-
             case ')':
             	peek = ' ';
             	return Token.rpar;
-
             case '+':
             	peek = ' ';
             	return Token.plus;
-
             case '-':
             	peek = ' ';
             	return Token.minus;
-
             case '*':
             	peek = ' ';
             	return Token.mult;
-
             case '/':
             	peek = ' ';
             	return Token.div;
-
-			// ... gestire gli altri casi ... FATTO//
-
             case '&':
                 readch();
                 if (peek == '&') {
@@ -88,7 +89,6 @@ public class Lexer {
                             + " after & : "  + peek );
                     return null;
                 }
-            /*Gestisco gli altri casi*/
             case '|':
             	readch();
             	if (peek == '|'){
@@ -98,7 +98,6 @@ public class Lexer {
             		System.err.println("Erroneous character" + " after | : " + peek);
             		return null;
             	}
-
             case '=':
             	readch();
             	if (peek == '='){
@@ -108,7 +107,6 @@ public class Lexer {
             		System.err.println("Erroneous character" + " after = : " + peek);
             		return null;
             	}
-
             case '<':
             	readch();
             	if (peek == '='){
@@ -122,7 +120,6 @@ public class Lexer {
             			peek = ' ';
             			return Token.lt;
             		}
-
             case '>':
             	readch();
             	if (peek == '='){
@@ -132,7 +129,6 @@ public class Lexer {
             		peek = ' ';
             		return Token.gt;
             	}
-
             case ':':
             	readch();
             	if (peek == '='){
@@ -142,51 +138,60 @@ public class Lexer {
             		peek = ' ';
             		return Token.colon;
             	}
-
-			// ... gestire gli altri casi ... FATTO//
-          
             default:
-                if (Character.isLetter(peek)) {
+                if (Character.isLetter(peek) || peek == '_') {
                     String s = "";
                     do {
                         s += peek;
                         readch();
-                    } while (Character.isDigit(peek) || Character.isLetter(peek));
+                    } while (Character.isDigit(peek) || Character.isLetter(peek) || peek == '_');
                     
-                    if ((Word)words.get(s) != null) 
+                    if ((Word)words.get(s) != null)
                         return (Word)words.get(s);
                     else {
-                    	Word w = new Word(Tag.ID,s);
-                    	words.put(s, w);
-                    	return w;
+                        if (Dfa.identificatori(s) == true) {
+                            Word w = new Word(Tag.ID, s);
+                            words.put(s, w);
+                            return w;
+                        }
+                        else {
+                            System.err.println("Erroneous character: " + s);
+                            return null;
+                        }
                     }
                 } 
-                /*Gestisco il caso dei numeri*/
-                else {
-	               	if (Character.isDigit(peek)){
+                else { 
+	               	if (Character.isDigit(peek)) {                      //Gestione casi numerici
                 		String s = "";
+                        boolean flag = true;
                 		do {
                 			s += peek;
-                			readch();
-                		} while (Character.isDigit(peek));
+                			if (!Character.isDigit(peek))
+                                flag = false;
+                            readch();
+                		} while (Character.isDigit(peek) || Character.isLetter(peek) || peek == '_');
 
-                		if ((Number)numbers.get(s) != null)
-                			return (Number)numbers.get(s);
-                		else {
-                			Number n = new Number(Tag.NUM, s);
-                			numbers.put(s, n);
-                			return n;
-                		}
+                        if (flag) {
+                	       	if ((Number)numbers.get(s) != null)
+                                return (Number)numbers.get(s);
+                            else {
+                                Number n = new Number(Tag.NUM, s);
+                                numbers.put(s, n);
+                                return n;
+                            }
+                        }
+                        else {
+                            System.err.println("Erroneous character: " + s);
+                            return null;
+                        }
                 	}
 
-			// ... gestire il caso dei numeri ... FATTO//
-
-                        if (peek == '$') {
-                            return new Token(Tag.EOF);
-                        } else {
+                    if (peek == '$') {
+                        return new Token(Tag.EOF);
+                    } else {
                         System.err.println("Erroneous character: " + peek );
                         return null;
-                        }
+                    }
                 }
          }
     }
