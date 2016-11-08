@@ -166,7 +166,7 @@ public class Lexer {
                         boolean flag = true;
                 		do {
                 			s += peek;
-                			if (!Character.isDigit(peek))
+                			if (!Character.isDigit(peek) && flag)
                                 flag = false;
                             readch();
                 		} while (Character.isDigit(peek) || Character.isLetter(peek) || peek == '_');
