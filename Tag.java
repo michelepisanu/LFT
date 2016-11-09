@@ -16,6 +16,13 @@ public class Tag {
             TRUE = 268,//
             FALSE = 269,//
             NOT = 270,
-            PRINT = 271;//
+            PRINT = 271,//
+            IF = 272,
+            ELSE = 273,
+            DO = 274,
+            WHILE = 275,
+            BEGIN = 276,
+            END = 276,
+            THEN = 277;
 }
 /*Il commento // dopo le variabili, identifica quelle inserite come parole riservate in Lexer*/

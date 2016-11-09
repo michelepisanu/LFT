@@ -3,8 +3,8 @@ public class Supporto {
 	 * isANumber:
 	 * ch valore di tipo char.
 	 * return: 
-	 * 	True: se è un numero che da 0 a 9;
-	 * 	False: se non è un numero.
+	 * 	True: se e' un numero che da 0 a 9;
+	 * 	False: se non e' un numero.
 	 */
 	public static boolean isANumber(char ch) {
 		return ch > 47 && ch < 58;

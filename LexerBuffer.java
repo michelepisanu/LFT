@@ -1,7 +1,7 @@
 import java.io.*; 
 import java.util.*;
 
-public class Lexer {
+public class LexerBuffer {
 
     public static int line = 1;
     private char peek = ' ';
@@ -19,7 +19,7 @@ public class Lexer {
     /**
      * Costruttore che gestisce le altre parole chiave.
      */
-    public Lexer() {
+    public LexerBuffer() {
         reserve( new Word(Tag.VAR, "var"));
         reserve( new Word(Tag.PRINT, "print"));
         reserve( new Word(Tag.EOF, "$"));
@@ -41,9 +41,9 @@ public class Lexer {
     /**
      * Si occupa della lettura da tastiera, della verifica che il valore inserito faccia parte dal carattere 0 al 255 del codice ANSI;
      */
-    private void readch() {
+    private void readch(BufferedReader br) {
         try {
-            peek = (char) System.in.read();
+            peek = (char) br.read();
         } catch (IOException exc) {
             peek = (char) -1; // ERROR
         }
@@ -52,13 +52,14 @@ public class Lexer {
     /**
      *
      */
-    public Token lexical_scan() {
+    public Token lexical_scan(BufferedReader br) {
         while (peek == ' ' || peek == '\t' || peek == '\n'  || peek == '\r') {
             if (peek == '\n') line++; //Questo non andrebbe cambiato?
-            readch();
+            readch(br);
         }
         
         switch (peek) {
+        	  
             case ',':
                 peek = ' ';
                 return Token.comma;
@@ -83,8 +84,9 @@ public class Lexer {
             case '/':
             	peek = ' ';
             	return Token.div;
+            	
             case '&':
-                readch();
+                readch(br);
                 if (peek == '&') {
                     peek = ' ';
                     return Word.and;
@@ -94,7 +96,7 @@ public class Lexer {
                     return null;
                 }
             case '|':
-            	readch();
+            	readch(br);
             	if (peek == '|'){
             		peek = ' ';
             		return Word.and;
@@ -103,7 +105,7 @@ public class Lexer {
             		return null;
             	}
             case '=':
-            	readch();
+            	readch(br);
             	if (peek == '='){
             		peek = ' ';
             		return Word.eq;
@@ -112,7 +114,7 @@ public class Lexer {
             		return null;
             	}
             case '<':
-            	readch();
+            	readch(br);
             	if (peek == '='){
             		peek = ' ';
             		return Word.le;
@@ -125,7 +127,7 @@ public class Lexer {
             			return Token.lt;
             		}
             case '>':
-            	readch();
+            	readch(br);
             	if (peek == '='){
             		peek = ' ';
             		return Word.ne;
@@ -134,7 +136,7 @@ public class Lexer {
             		return Token.gt;
             	}
             case ':':
-            	readch();
+            	readch(br);
             	if (peek == '='){
             		peek = ' ';
             		return Word.assign;
@@ -147,7 +149,7 @@ public class Lexer {
                     String s = "";
                     do {
                         s += peek;
-                        readch();
+                        readch(br);
                     } while (Character.isDigit(peek) || Character.isLetter(peek) || peek == '_');
                     
                     if ((Word)words.get(s) != null)
@@ -172,7 +174,7 @@ public class Lexer {
                 			s += peek;
                 			if (!Character.isDigit(peek))
                                 flag = false;
-                            readch();
+                            readch(br);
                 		} while (Character.isDigit(peek) || Character.isLetter(peek) || peek == '_');
 
                         if (flag) {
@@ -190,7 +192,7 @@ public class Lexer {
                         }
                 	}
 
-                    if (peek == '$') {
+                    if (peek == (char)-1) {
                         return new Token(Tag.EOF);
                     } else {
                         System.err.println("Erroneous character: " + peek );
@@ -201,14 +203,21 @@ public class Lexer {
     }
 		
     public static void main(String[] args) {
-        Lexer lex = new Lexer();
+        LexerBuffer lex = new LexerBuffer();
         
-        Token tok;
-        do {
-            tok = lex.lexical_scan();
+        String path = "prova.txt";
+        try{
+        	BufferedReader br = new BufferedReader(new FileReader(path));
+        	Token tok;
+        	
+        	do {
+            tok = lex.lexical_scan(br);
             System.out.println("Scan: " + tok);
-        } while (tok.tag != Tag.EOF);
-    }
+        	} while (tok.tag != Tag.EOF);
+        	br.close();
+    	   
+    	   } catch (IOException e) {e.printStackTrace();}
 
+	}
 }
 /*Il Lexer è aggiornato fino a 2.1. 2.2 è da fare*/
